@@ -208,3 +208,103 @@ function DrawAisles() {
     DrawAisle(25, 19, 25, 22);
     DrawAisle(25, 25, 25, 28);
 };
+
+
+class Direct {
+    static None = 0;
+    static North = 1;
+    static South = 2;
+    static West = 3;
+    static East = 4;
+};
+
+class Position {
+    CenterX = 0;
+    CenterY = 0;
+}
+
+class Pacman {
+    Position = null;
+    Direct = Direct.West;
+    NextDirect = Direct.West;
+    PrevDirect = Direct.West;
+
+    constructor() {
+        this.Position = new Position();
+        this.Direct = Direct.West;
+        this.NextDirect = Direct.West;
+    };
+
+    GoHome() {
+        this.Position.CenterX = 12.5;
+        this.Position.CenterY = 22;
+        this.Direct = Direct.West;
+        this.NextDirect = Direct.West;
+    };
+
+    Move() {
+        if(this.Direct == Direct.West) {
+            this.Position.CenterX -= 0.1;
+        } else if(this.Direct == Direct.East) {
+            this.Position.CenterX += 0.1;
+        } else if(this.Direct == Direct.North) {
+            this.Position.CenterY -= 0.1;
+        } else if(this.Direct == Direct.South) {
+            this.Position.CenterY += 0.1;
+        }
+
+        let x = Math.round(this.Position.CenterX * 10) / 10;
+        let y = Math.round(this.Position.CenterY * 10) / 10;
+        
+        this.Position.CenterX = x;
+        this.Position.CenterY = y;
+    };
+};
+
+function canMoveNorth(x, y) {
+    if(x == 0 || x == 25) {
+        if(0 < y && 7 <= 7) {
+            return true;
+        } else if(19 < y && y <= 22) {
+            return true;
+        } else if(25 < y && y <= 28) {
+            return true;
+        } else {
+            return false;
+        };
+    } else if(x == 2 || x == 23) {
+        if(22 < y && y <= 25) {
+            return true;
+        } else {
+            return false;
+        };
+    } else if(x == 5 || x == 20) {
+        if(0 < y && y <= 25) {
+            return true;
+        } else {
+            return false;
+        };
+    } else if (x == 8 || x == 17) {
+        if (4 < y && y <=7) {
+            return true;
+        } else if(10 < y && y <= 19) {
+            return true;
+        } else if(22 < y && y <= 25) {
+            return true;
+        } else {
+            return false;
+        };
+    } else if(x == 11 || x == 14) {
+        if(0 < y && y <= 4) {
+            return true;
+        } else if(7 < y && y <= 10) {
+            return true;
+        } else if(19 < y && y <= 22) {
+            return true;
+        } else if(25 < y && y <= 28) {
+            return true;
+        } else {
+            return false;
+        };
+    };
+};
