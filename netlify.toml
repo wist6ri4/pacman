@@ -1,5 +1,0 @@
-[[redirect]]
-    from = "/*"
-    to = "/pacman.html"
-    status = 200
-    force = true
