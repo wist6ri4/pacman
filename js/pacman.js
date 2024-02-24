@@ -13,7 +13,7 @@ class Pacman {
         this.NextDirect = Direct.West;
     };
 
-    // スタート位置へ戻る
+    // 初期位置へ戻る
     GoHome() {
         this.Position.CenterX = 12.5;
         this.Position.CenterY = 22;
