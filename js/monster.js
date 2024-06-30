@@ -1,3 +1,6 @@
+/**
+ * モンスタークラスの実装
+ */
 class Monster {
     Id = 0;
     InitPosition = null;
