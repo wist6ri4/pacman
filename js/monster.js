@@ -1,5 +1,5 @@
 /**
- * モンスタークラスの実装
+ * Monsterクラス
  */
 class Monster {
     Id = 0;
@@ -43,7 +43,7 @@ class Monster {
         };
 
         // 巣から出た直後に進路選択をする
-        if(this.Direct == Direct.North && this.Position.CenterX == 12.5 && this.Positon.CenterY == 10) {
+        if(this.Direct == Direct.North && this.Position.CenterX == 12.5 && this.Position.CenterY == 10) {
             if(Math.random() < 0.5) {
                 this.Direct = Direct.West;
             } else {
@@ -257,8 +257,8 @@ class Monster {
         // 別のところで
         // const offsetX = 40; const offsetY = 60;
         // const magnification = 18.0; const charctorSize = 35;と定義されている
-        let x = this.Position.CenterX * magnification - charctorSize / 2 + offsetX;
-        let y = this.Position.CenterY * magnification - charctorSize / 2 + offsetY;
-        con.drawImage(monsterImage, x, y, charctorSize, charctorSize);
+        let x = this.Position.CenterX * magnification - charactorSize / 2 + offsetX;
+        let y = this.Position.CenterY * magnification - charactorSize / 2 + offsetY;
+        context.drawImage(monsterImage, x, y, charactorSize, charactorSize);
     };
 };

@@ -1,5 +1,5 @@
 /**
- * 方向クラス
+ * Directクラス
  */
 class Direct {
     static None = 0;
@@ -10,9 +10,11 @@ class Direct {
 };
 
 /**
- * 位置クラス
+ * Positionクラス
  */
 class Position {
-    CenterX = 0;
-    CenterY = 0;
+    constructor() {
+        this.CenterX = 0;
+        this.CenterY = 0;
+    };
 };
