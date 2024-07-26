@@ -1,6 +1,7 @@
 /**
  * グローバル変数
  */
+// 画面
 let canvas = null; // HTMLのcanvas（document.getElementById('canvas-pacman')）
 let context = null; // canvasに描画するためのオブジェクト（getContext('2d')）
 
@@ -11,22 +12,22 @@ const offsetY = 60; // y座標
 const magnification = 18.0; // 拡大用の定数
 
 // dot関連
-const dotSize = 4; // dotのサイズ
+const dotSize = 4; // dotサイズの定数
 let dots = []; // dot格納用配列
 let powerDots = []; // powerdot格納用配列
 
 // pacman関連
-const charactorSize = 35; // キャラクターサイズ
+const charactorSize = 35; // キャラクターサイズの定数
 let pacman = null; // pacmanオブジェクト
-let pacmanUpImage = null; // pacman北向き
-let pacmanDownImage = null; // pacman南向き
-let pacmanRightImage = null; // pacman東向き
-let pacmanLeftImage = null; // pacman西向き
+let pacmanUpImage = null; // pacman北向きの画像
+let pacmanDownImage = null; // pacman南向きの画像
+let pacmanRightImage = null; // pacman東向きの画像
+let pacmanLeftImage = null; // pacman西向きの画像
 
 // monster関連
 let monsters = []; // monsterオブジェクト
-let monsterImages = []; // monsterのイメージ画像
-let ijikeImages = []; // ijikeのイメージ画像
+let monsterImages = []; // monsterの画像
+let ijikeImages = []; // ijikeの画像
 let moveCount = 0;
 
 // 強化ドットの効果時間
@@ -42,13 +43,16 @@ let stoping = false; // 各キャラクターの停止判定
 let eatMonsterCount = 0; // モンスターを食べた回数
 
 
-// 画面起動時にメインメソッドを呼び出し
+/**
+ * 画面起動時にメインメソッドを呼び出し
+ */
 Main();
 
 /**
  * メインメソッド
  */
 function Main() {
+    // 画面情報設定
     canvas = document.getElementById('canvas-pacman');
     context = canvas.getContext('2d');
 
@@ -91,12 +95,12 @@ function Main() {
     setInterval(PacmanMove, 15);
     setInterval(MoveMonsters, 15);
 
-    // 描画処理
+    // ゲーム本体を0.01秒ごとに描画
     setInterval(Draw, 10);
 
     // 強化ドットの効果時間設定
     setInterval(() => {
-        if (CounterattackTime > 0)
+        if(CounterattackTime > 0)
             CounterattackTime -= 100;
     }, 100);
 };
@@ -105,22 +109,24 @@ function Main() {
  * ゲーム本体の描画
  */
 function Draw() {
-    DrawMazes();
-    DrawDots();
-    DrawPowerDots();
+    DrawMazes(); // 迷路描画
+    DrawDots(); // ドット描画
+    DrawPowerDots(); // 強化ドット描画
 
     if(!isGameOver) {
-        DrawPac();
+        DrawPac(); // パックマン描画
     };
 
-    DrawMonsters();
-    DrawScore();
-    DrawRest();
+    DrawMonsters(); // モンスター描画
+    DrawScore(); // スコア描画
+    DrawRest(); // 残機描画
+
+    // ゲームオーバーの場合、画面に「GAME OVER」を表示
     if(isGameOver) {
         context.fillStyle = "white";
         context.font = "28px 'ＭＳ ゴシック'"
-        context.fillText("Game Over", offsetX + 170, offsetY+295, 250);
-    }
+        context.fillText("GAME OVER", offsetX + 170, offsetY+295, 250);
+    };
 };
 
 /**
@@ -135,8 +141,8 @@ function DrawMazes() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    DrawWalls();
-    DrawAisles();
+    DrawWalls(); // 壁の描画
+    DrawAisles(); // 道の描画
 };
 
 /**
@@ -154,11 +160,11 @@ function DrawWall(x1, y1, x2, y2) {
     if(y1 == y2) {
         x1 -= 0.8;
         x2 += 0.8;
-    }
+    };
     if(x1 == x2) {
         y1 -= 0.8;
         y2 += 0.8;
-    }
+    };
 
     context.beginPath(); // 新しいパスを開始
     context.moveTo(x1 * magnification + offsetX, y1 * magnification + offsetY); // 筆の始点を指定
@@ -181,11 +187,11 @@ function DrawAisle(x1, y1, x2, y2) {
     if(y1 == y2) {
         x1 -= 0.8;
         x2 += 0.8;
-    }
+    };
     if(x1 == y2) {
         y1 -= 0.8;
         y2 += 0.8;
-    }
+    };
 
     context.beginPath(); // 新しいパスを開始
     context.moveTo(x1 * magnification + offsetX, y1 * magnification + offsetY); // 筆の始点を指定
@@ -305,263 +311,263 @@ function DrawAisles() {
 
 /**
  * 北へ行けるかを判定する
- * @param {*} x X軸
- * @param {*} y Y軸
+ * @param {int} x X軸
+ * @param {int} y Y軸
  * @returns 判定結果
  */
 function CanMoveNorth(x, y) {
-    if (x == 0 || x == 25) {
-        if (0 < y && y <= 7)
+    if(x == 0 || x == 25) {
+        if(0 < y && y <= 7)
             return true;
-        if (19 < y && y <= 22)
+        if(19 < y && y <= 22)
             return true;
-        if (25 < y && y <= 28)
-            return true;
-        return false;
-    }
-    if (x == 2 || x == 23) {
-        if (22 < y && y <= 25)
+        if(25 < y && y <= 28)
             return true;
         return false;
-    }
-    if (x == 5 || x == 20) {
-        if (0 < y && y <= 25)
+    };
+    if(x == 2 || x == 23) {
+        if(22 < y && y <= 25)
             return true;
         return false;
-    }
-    if (x == 8 || x == 17) {
-        if (4 < y && y <= 7)
-            return true;
-        if (10 < y && y <= 19)
-            return true;
-        if (22 < y && y <= 25)
+    };
+    if(x == 5 || x == 20) {
+        if(0 < y && y <= 25)
             return true;
         return false;
-    }
-    if (x == 11 || x == 14) {
-        if (0 < y && y <= 4)
+    };
+    if(x == 8 || x == 17) {
+        if(4 < y && y <= 7)
             return true;
-        if (7 < y && y <= 10)
+        if(10 < y && y <= 19)
             return true;
-        if (19 < y && y <= 22)
-            return true;
-        if (25 < y && y <= 28)
+        if(22 < y && y <= 25)
             return true;
         return false;
-    }
+    };
+    if(x == 11 || x == 14) {
+        if(0 < y && y <= 4)
+            return true;
+        if(7 < y && y <= 10)
+            return true;
+        if(19 < y && y <= 22)
+            return true;
+        if(25 < y && y <= 28)
+            return true;
+        return false;
+    };
     return false;
 };
 
 /**
  * 南へ行けるかを判定する
- * @param {*} x X軸
- * @param {*} y y軸
+ * @param {int} x X軸
+ * @param {int} y y軸
  * @returns 判定結果
  */
 function CanMoveSouth(x, y) {
-    if (x == 0 || x == 25) {
-        if (0 <= y && y < 7)
+    if(x == 0 || x == 25) {
+        if(0 <= y && y < 7)
             return true;
-        if (19 <= y && y < 22)
+        if(19 <= y && y < 22)
             return true;
-        if (25 <= y && y < 28)
-            return true;
-        return false;
-    }
-    if (x == 2 || x == 23) {
-        if (22 <= y && y < 25)
+        if(25 <= y && y < 28)
             return true;
         return false;
-    }
-    if (x == 5 || x == 20) {
-        if (0 <= y && y < 25)
+    };
+    if(x == 2 || x == 23) {
+        if(22 <= y && y < 25)
             return true;
         return false;
-    }
-    if (x == 8 || x == 17) {
-        if (4 <= y && y < 7)
-            return true;
-        if (10 <= y && y < 19)
-            return true;
-        if (22 <= y && y < 25)
+    };
+    if(x == 5 || x == 20) {
+        if(0 <= y && y < 25)
             return true;
         return false;
-    }
-    if (x == 11 || x == 14) {
-        if (0 <= y && y < 4)
+    };
+    if(x == 8 || x == 17) {
+        if(4 <= y && y < 7)
             return true;
-        if (7 <= y && y < 10)
+        if(10 <= y && y < 19)
             return true;
-        if (19 <= y && y < 22)
-            return true;
-        if (25 <= y && y < 28)
+        if(22 <= y && y < 25)
             return true;
         return false;
-    }
+    };
+    if(x == 11 || x == 14) {
+        if(0 <= y && y < 4)
+            return true;
+        if(7 <= y && y < 10)
+            return true;
+        if(19 <= y && y < 22)
+            return true;
+        if(25 <= y && y < 28)
+            return true;
+        return false;
+    };
     return false;
 };
 
 /**
  * 東へ行けるかを判定する
- * @param {*} x X軸 
- * @param {*} y Y軸
+ * @param {int} x X軸 
+ * @param {int} y Y軸
  * @returns 判定結果
  */
 function CanMoveEast(x, y) {
-    if (y == 0) {
-        if (0 <= x && x < 11)
+    if(y == 0) {
+        if(0 <= x && x < 11)
             return true;
-        if (14 <= x && x < 25)
-            return true;
-        return false;
-    }
-    if (y == 4) {
-        if (0 <= x && x < 25)
+        if(14 <= x && x < 25)
             return true;
         return false;
-    }
-    if (y == 7) {
-        if (0 <= x && x < 5)
-            return true;
-        if (8 <= x && x < 11)
-            return true;
-        if (14 <= x && x < 17)
-            return true;
-        if (20 <= x && x < 25)
+    };
+    if(y == 4) {
+        if(0 <= x && x < 25)
             return true;
         return false;
-    }
-    if (y == 10) {
-        if (8 <= x && x < 17)
+    };
+    if(y == 7) {
+        if(0 <= x && x < 5)
+            return true;
+        if(8 <= x && x < 11)
+            return true;
+        if(14 <= x && x < 17)
+            return true;
+        if(20 <= x && x < 25)
             return true;
         return false;
-    }
-    if (y == 13) {
-        if (0 <= x && x < 8)
-            return true;
-        if (17 <= x && x < 25)
+    };
+    if(y == 10) {
+        if(8 <= x && x < 17)
             return true;
         return false;
-    }
-    if (y == 16) {
-        if (8 <= x && x < 17)
+    };
+    if(y == 13) {
+        if(0 <= x && x < 8)
+            return true;
+        if(17 <= x && x < 25)
             return true;
         return false;
-    }
-    if (y == 19) {
-        if (0 <= x && x < 11)
-            return true;
-        if (14 <= x && x < 25)
+    };
+    if(y == 16) {
+        if(8 <= x && x < 17)
             return true;
         return false;
-    }
-    if (y == 22) {
-        if (0 <= x && x < 2)
+    };
+    if(y == 19) {
+        if(0 <= x && x < 11)
             return true;
-        if (5 <= x && x < 20)
-            return true;
-        if (23 <= x && x < 25)
+        if(14 <= x && x < 25)
             return true;
         return false;
-    }
-    if (y == 25) {
-        if (0 <= x && x < 5)
+    };
+    if(y == 22) {
+        if(0 <= x && x < 2)
             return true;
-        if (8 <= x && x < 11)
+        if(5 <= x && x < 20)
             return true;
-        if (14 <= x && x < 17)
-            return true;
-        if (20 <= x && x < 25)
+        if(23 <= x && x < 25)
             return true;
         return false;
-    }
-    if (y == 28) {
-        if (0 <= x && x < 25)
+    };
+    if(y == 25) {
+        if(0 <= x && x < 5)
+            return true;
+        if(8 <= x && x < 11)
+            return true;
+        if(14 <= x && x < 17)
+            return true;
+        if(20 <= x && x < 25)
             return true;
         return false;
-    }
+    };
+    if(y == 28) {
+        if(0 <= x && x < 25)
+            return true;
+        return false;
+    };
     return false;
 };
 
 /**
  * 西へ行けるかを判定する
- * @param {*} x X軸
- * @param {*} y Y軸
+ * @param {int} x X軸
+ * @param {int} y Y軸
  * @returns 判定結果
  */
 function CanMoveWest(x, y) {
-    if (y == 0) {
-        if (0 < x && x <= 11)
+    if(y == 0) {
+        if(0 < x && x <= 11)
             return true;
-        if (14 < x && x <= 25)
-            return true;
-        return false;
-    }
-    if (y == 4) {
-        if (0 < x && x <= 25)
+        if(14 < x && x <= 25)
             return true;
         return false;
-    }
-    if (y == 7) {
-        if (0 < x && x <= 5)
-            return true;
-        if (8 < x && x <= 11)
-            return true;
-        if (14 < x && x <= 17)
-            return true;
-        if (20 < x && x <= 25)
+    };
+    if(y == 4) {
+        if(0 < x && x <= 25)
             return true;
         return false;
-    }
-    if (y == 10) {
-        if (8 < x && x <= 17)
+    };
+    if(y == 7) {
+        if(0 < x && x <= 5)
+            return true;
+        if(8 < x && x <= 11)
+            return true;
+        if(14 < x && x <= 17)
+            return true;
+        if(20 < x && x <= 25)
             return true;
         return false;
-    }
-    if (y == 13) {
-        if (0 < x && x <= 8)
-            return true;
-        if (17 < x && x <= 25)
+    };
+    if(y == 10) {
+        if(8 < x && x <= 17)
             return true;
         return false;
-    }
-    if (y == 16) {
-        if (8 < x && x <= 17)
+    };
+    if(y == 13) {
+        if(0 < x && x <= 8)
+            return true;
+        if(17 < x && x <= 25)
             return true;
         return false;
-    }
-    if (y == 19) {
-        if (0 < x && x <= 11)
-            return true;
-        if (14 < x && x <= 25)
+    };
+    if(y == 16) {
+        if(8 < x && x <= 17)
             return true;
         return false;
-    }
-    if (y == 22) {
-        if (0 < x && x <= 2)
+    };
+    if(y == 19) {
+        if(0 < x && x <= 11)
             return true;
-        if (5 < x && x <= 20)
-            return true;
-        if (23 < x && x <= 25)
+        if(14 < x && x <= 25)
             return true;
         return false;
-    }
-    if (y == 25) {
-        if (0 < x && x <= 5)
+    };
+    if(y == 22) {
+        if(0 < x && x <= 2)
             return true;
-        if (8 < x && x <= 11)
+        if(5 < x && x <= 20)
             return true;
-        if (14 < x && x <= 17)
-            return true;
-        if (20 < x && x <= 25)
+        if(23 < x && x <= 25)
             return true;
         return false;
-    }
-    if (y == 28) {
-        if (0 < x && x <= 25)
+    };
+    if(y == 25) {
+        if(0 < x && x <= 5)
+            return true;
+        if(8 < x && x <= 11)
+            return true;
+        if(14 < x && x <= 17)
+            return true;
+        if(20 < x && x <= 25)
             return true;
         return false;
-    }
+    };
+    if(y == 28) {
+        if(0 < x && x <= 25)
+            return true;
+        return false;
+    };
     return false;
 };
 
@@ -575,7 +581,7 @@ function CanMoveWest(x, y) {
  * @returns 
  */
 function PacmanMove() {
-    if (stoping)
+    if(stoping)
         return;
 
     pacman.Move();
@@ -583,20 +589,20 @@ function PacmanMove() {
 
 /**
  * キーボード押下時のpacman移動メソッド
- * @param {キーボードイベント} e 
+ * @param {object} e キーボードイベント
  */
 function OnKeyDown(e) {
-    if (e.keyCode == 37)
+    if(e.keyCode == 37)
         pacman.NextDirect = Direct.West;
-    if (e.keyCode == 38)
+    if(e.keyCode == 38)
         pacman.NextDirect = Direct.North;
-    if (e.keyCode == 39)
+    if(e.keyCode == 39)
         pacman.NextDirect = Direct.East;
-    if (e.keyCode == 40)
+    if(e.keyCode == 40)
         pacman.NextDirect = Direct.South;
-    if (e.keyCode == 83 && isGameOver == true)
+    if(e.keyCode == 83 && isGameOver == true)
         GameRetart();
-}
+};
 
 /**
  * pacmanの描画
@@ -615,21 +621,21 @@ function DrawPac() {
  * @returns 
  */
 function MoveMonsters() {
-    if (stoping) {
+    if(stoping) {
         return;
     };
 
     // moveCountが大きくなりすぎないようにときどきリセットする
     moveCount++;
-    if (moveCount >= 10000) {
+    if(moveCount >= 10000) {
         moveCount = 0;
     };
 
-    for (let i = 0; i < monsters.length; i++) {
+    for(let i = 0; i < monsters.length; i++) {
         let monster = monsters[i];
 
         // イジケ状態のときは2回に1回しかmonster.Move()が実行しない
-        if (!monster.IsIjike || (moveCount % 2 == 0))
+        if(!monster.IsIjike || (moveCount % 2 == 0))
             monster.Move();
     };
 };
@@ -654,8 +660,8 @@ function MonstersInit() {
  */
 function SetMonstersStandbyCount(counts) {
     let count = monsters.length;
-    for (let i = 0; i < count; i++) {
-        if (counts.length >= i)
+    for(let i = 0; i < count; i++) {
+        if(counts.length >= i)
             monsters[i].StandbyCount = counts[i];
     };
 };
@@ -676,83 +682,83 @@ function DrawMonsters() {
  * Dotオブジェクトの生成メソッド
  */
 function CreateDots() {
-    for (let x = 0; x <= 11; x++)
+    for(let x = 0; x <= 11; x++)
         dots.push(new Dot(x, 0));
-    for (let x = 14; x <= 25; x++)
+    for(let x = 14; x <= 25; x++)
         dots.push(new Dot(x, 0));
-    for (let y = 1; y <= 3; y++) {
-        if (y != 2)
+    for(let y = 1; y <= 3; y++) {
+        if(y != 2)
             dots.push(new Dot(0, y));
         dots.push(new Dot(5, y));
         dots.push(new Dot(11, y));
         dots.push(new Dot(14, y));
         dots.push(new Dot(20, y));
-        if (y != 2)
+        if(y != 2)
             dots.push(new Dot(25, y));
-    }
-    for (let x = 0; x <= 25; x++)
+    };
+    for(let x = 0; x <= 25; x++)
         dots.push(new Dot(x, 4));
-    for (let y = 5; y <= 6; y++) {
+    for(let y = 5; y <= 6; y++) {
         dots.push(new Dot(0, y));
         dots.push(new Dot(5, y));
         dots.push(new Dot(8, y));
         dots.push(new Dot(17, y));
         dots.push(new Dot(20, y));
         dots.push(new Dot(25, y));
-    }
-    for (let x = 0; x <= 5; x++)
+    };
+    for(let x = 0; x <= 5; x++)
         dots.push(new Dot(x, 7));
-    for (let x = 8; x <= 11; x++)
+    for(let x = 8; x <= 11; x++)
         dots.push(new Dot(x, 7));
-    for (let x = 14; x <= 17; x++)
+    for(let x = 14; x <= 17; x++)
         dots.push(new Dot(x, 7));
-    for (let x = 20; x <= 25; x++)
+    for(let x = 20; x <= 25; x++)
         dots.push(new Dot(x, 7));
-    for (let y = 8; y <= 18; y++) {
+    for(let y = 8; y <= 18; y++) {
         dots.push(new Dot(5, y));
         dots.push(new Dot(20, y));
-    }
-    for (let x = 0; x <= 11; x++)
+    };
+    for(let x = 0; x <= 11; x++)
         dots.push(new Dot(x, 19));
-    for (let x = 14; x <= 25; x++)
+    for(let x = 14; x <= 25; x++)
         dots.push(new Dot(x, 19));
-    for (let y = 20; y <= 21; y++) {
+    for(let y = 20; y <= 21; y++) {
         dots.push(new Dot(0, y));
         dots.push(new Dot(5, y));
         dots.push(new Dot(11, y));
         dots.push(new Dot(14, y));
         dots.push(new Dot(20, y));
         dots.push(new Dot(25, y));
-    }
-    for (let x = 1; x <= 2; x++)
+    };
+    for(let x = 1; x <= 2; x++)
         dots.push(new Dot(x, 22));
-    for (let x = 5; x <= 20; x++)
+    for(let x = 5; x <= 20; x++)
         dots.push(new Dot(x, 22));
-    for (let x = 23; x <= 24; x++)
+    for(let x = 23; x <= 24; x++)
         dots.push(new Dot(x, 22));
-    for (let y = 23; y <= 24; y++) {
+    for(let y = 23; y <= 24; y++) {
         dots.push(new Dot(2, y));
         dots.push(new Dot(5, y));
         dots.push(new Dot(8, y));
         dots.push(new Dot(17, y));
         dots.push(new Dot(20, y));
         dots.push(new Dot(23, y));
-    }
-    for (let y = 26; y <= 27; y++) {
+    };
+    for(let y = 26; y <= 27; y++) {
         dots.push(new Dot(0, y));
         dots.push(new Dot(11, y));
         dots.push(new Dot(14, y));
         dots.push(new Dot(25, y));
-    }
-    for (let x = 0; x <= 5; x++)
+    };
+    for(let x = 0; x <= 5; x++)
         dots.push(new Dot(x, 25));
-    for (let x = 8; x <= 11; x++)
+    for(let x = 8; x <= 11; x++)
         dots.push(new Dot(x, 25));
-    for (let x = 14; x <= 17; x++)
+    for(let x = 14; x <= 17; x++)
         dots.push(new Dot(x, 25));
-    for (let x = 20; x <= 25; x++)
+    for(let x = 20; x <= 25; x++)
         dots.push(new Dot(x, 25));
-    for (let x = 0; x <= 25; x++)
+    for(let x = 0; x <= 25; x++)
         dots.push(new Dot(x, 28));
 };
 
@@ -760,9 +766,9 @@ function CreateDots() {
  * ドットオブジェクトの描画メソッド
  */
 function DrawDots() {
-    for (let i = 0; i < dots.length; i++) {
+    for(let i = 0; i < dots.length; i++) {
         let dot = dots[i];
-        if (!dot.IsEaten) {
+        if(!dot.IsEaten) {
             context.fillStyle = "white";
             let x = dot.X * magnification - dotSize / 2 + offsetX;
             let y = dot.Y * magnification - dotSize / 2 + offsetY;
@@ -785,9 +791,9 @@ function CreatePowerDots() {
  * 強化ドットオブジェクトの描画メソッド
  */
 function DrawPowerDots() {
-    for (let i = 0; i < powerDots.length; i++) {
+    for(let i = 0; i < powerDots.length; i++) {
         let dot = powerDots[i];
-        if (!dot.IsEaten) {
+        if(!dot.IsEaten) {
             let dotSize = 8;
             context.fillStyle = "yellow";
             let x = dot.X * magnification - dotSize / 2 + offsetX;
@@ -802,16 +808,16 @@ function DrawPowerDots() {
  */
 function CheckEatDot() {
     let dot = dots.find(dot => dot.X == pacman.Position.CenterX && dot.Y == pacman.Position.CenterY);
-    if (dot != null) {
-        if (!dot.IsEaten) {
+    if(dot != null) {
+        if(!dot.IsEaten) {
             dot.IsEaten = true;
             OnEatDot();
         };
     };
 
     let powerDot = powerDots.find(dot => dot.X == pacman.Position.CenterX && dot.Y == pacman.Position.CenterY);
-    if (powerDot != null) {
-        if (!powerDot.IsEaten) {
+    if(powerDot != null) {
+        if(!powerDot.IsEaten) {
             powerDot.IsEaten = true;
             OnEatPowerDot();
         };
@@ -823,7 +829,7 @@ function CheckEatDot() {
  */
 function OnEatDot() {
     score += 10;
-    if (CheckStageClear()) {
+    if(CheckStageClear()) {
         OnStageClear();
     };
 };
@@ -835,7 +841,7 @@ function OnEatPowerDot() {
     score += 50;
     eatMonsterCount = 0;
 
-    if (CheckStageClear()) {
+    if(CheckStageClear()) {
         OnStageClear();
     } else {
         // モンスターをいじけ状態にする
@@ -875,7 +881,7 @@ function GetHTMLImageElement(path) {
  */
 function DrawScore() {
     let strScore = "";
-    if (score < 10000) {
+    if(score < 10000) {
         strScore = ('00000' + score).slice(-5);
     } else {
         strScore = score.toString();
@@ -890,7 +896,7 @@ function DrawScore() {
  * 残機の表示
  */
 function DrawRest() {
-    for (let i = 0; i < rest-1; i++)
+    for(let i = 0; i < rest-1; i++)
         context.drawImage(pacmanRightImage, offsetX + 110 + 25 * i, offsetY-53, charactorSize * 0.7, charactorSize * 0.7);
 };
 
@@ -918,10 +924,10 @@ function GameRetart() {
  * モンスターの当たり判定
  */
 function CheckHitMonster() {
-    for (let i = 0; i < monsters.length; i++) {
+    for(let i = 0; i < monsters.length; i++) {
         let monster = monsters[i];
-        if (IsHitMonster(monster)) {
-            if (monster.IsIjike) {
+        if(IsHitMonster(monster)) {
+            if(monster.IsIjike) {
                 EatMonster(monster);
             } else {
                 PacmanDead();
@@ -933,13 +939,13 @@ function CheckHitMonster() {
 
 /**
  * モンスターにあたったかを判定するメソッド
- * @param {モンスター} monster 
+ * @param {Monster} monster 
  * @returns 
  */
 function IsHitMonster(monster) {
     let x2 = (pacman.Position.CenterX - monster.Position.CenterX) ** 2;
     let y2 = (pacman.Position.CenterY - monster.Position.CenterY) ** 2;
-    if (x2 + y2 < 1) {
+    if(x2 + y2 < 1) {
         return true;
     } else {
         return false;
@@ -948,7 +954,7 @@ function IsHitMonster(monster) {
 
 /**
  * イジケを食べたとき
- * @param {モンスターオブジェクト} monster 
+ * @param {Monster} monster 
  */
 function EatMonster(monster) {
     stoping = true;
@@ -960,7 +966,7 @@ function EatMonster(monster) {
 
 /**
  * イジケを食べた後に実行するメソッド
- * @param {モンスター} monster 
+ * @param {Monster} monster 
  */
 function AfterEatMonster(monster) {
     monster.GoHome();
@@ -980,7 +986,7 @@ function PacmanDead() {
  */
 function AfterPacmanDead() {
     rest--;
-    if (rest > 0) {
+    if(rest > 0) {
         pacman.GoHome();
         MonstersInit();
         stoping = false;
@@ -997,7 +1003,7 @@ function AfterPacmanDead() {
 function CheckStageClear() {
     let dot = dots.find(dot => !dot.IsEaten);
     let powerDot = powerDots.find(dot => !dot.IsEaten);
-    if (dot == null && powerDot == null) {
+    if(dot == null && powerDot == null) {
         return true;
     } else {
         return false;

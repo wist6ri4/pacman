@@ -23,18 +23,18 @@ class Pacman {
 
     // 移動
     Move() {
-        if (this.Direct == Direct.West) {
+        if(this.Direct == Direct.West) {
             this.Position.CenterX -= 0.1;
-        }
-        if (this.Direct == Direct.East) {
+        };
+        if(this.Direct == Direct.East) {
             this.Position.CenterX += 0.1;
-        }
-        if (this.Direct == Direct.North) {
+        };
+        if(this.Direct == Direct.North) {
             this.Position.CenterY -= 0.1;
-        }
-        if (this.Direct == Direct.South) {
+        };
+        if(this.Direct == Direct.South) {
             this.Position.CenterY += 0.1;
-        }
+        };
 
         // CanMoveメソッドを使うため、四捨五入する
         let x = Math.round(this.Position.CenterX * 10) / 10;
@@ -45,13 +45,13 @@ class Pacman {
         // this.NextDirectが移動できる方向の場合、this.Directに方向を代入する
         if(CanMoveNorth(x, y) && this.NextDirect == Direct.North) {
             this.Direct = Direct.North;
-        }
+        };
         if(CanMoveSouth(x, y) && this.NextDirect == Direct.South) {
             this.Direct = Direct.South;
-        }
+        };
         if(CanMoveEast(x, y) && this.NextDirect == Direct.East) {
             this.Direct = Direct.East;
-        }
+        };
         if(CanMoveWest(x, y) && this.NextDirect == Direct.West) {
             this.Direct = Direct.West;
         };
@@ -59,7 +59,7 @@ class Pacman {
         // 移動先がワープトンネルの場合、反対側から出てくる
         if((x == 0 && y == 13) && this.Direct == Direct.West) {
             this.Position.CenterX = 25;
-        }
+        };
         if((x == 25 && y == 13) && this.Direct == Direct.East) {
             this.Position.CenterX = 0;
         };
@@ -67,13 +67,13 @@ class Pacman {
         // this.Directが移動できない方向の場合、this.DirectにDirect.Noneを代入して停止する
         if(!CanMoveNorth(x, y) && this.Direct == Direct.North) {
             this.Direct = Direct.None;
-        }
+        };
         if(!CanMoveSouth(x, y) && this.Direct == Direct.South) {
             this.Direct = Direct.None;
-        }
+        };
         if(!CanMoveEast(x, y) && this.Direct == Direct.East) {
             this.Direct = Direct.None;
-        }
+        };
         if(!CanMoveWest(x, y) && this.Direct == Direct.West) {
             this.Direct = Direct.None;
         };
